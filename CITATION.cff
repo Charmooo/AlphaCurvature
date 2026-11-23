@@ -1,0 +1,34 @@
+cff-version: 1.2.0
+message: "If you use this formalization, please cite it as below."
+title: "AlphaCurvature: a Lean 4 proof of the Gibilisco–Isola conjecture on the scalar curvature of the α-geometries"
+authors:
+  - family-names: Bornemann
+    given-names: Adam
+    # orcid: "https://orcid.org/0000-0000-0000-0000"
+  - name: "Claude (Anthropic)"
+license: Apache-2.0
+# doi: (add the Zenodo DOI after the first release)
+# repository-code: (add the repository URL)
+type: software
+abstract: >-
+  A formal proof, in Lean 4 with Mathlib, of Conjecture 4.1 of P. Gibilisco and
+  T. Isola (J. Math. Phys. 46 (2005)), restated as open in P. Gibilisco, Entropy
+  22 (2020) 1409: on the open probability simplex with at least three points, the
+  scalar curvature of the α-geometry, the pullback of the Euclidean metric by the
+  Amari embedding ρ ↦ p ρ^(1/p), is strictly Schur-increasing for p in (2, ∞] and
+  strictly Schur-decreasing for p in (1, 2). The proof formalizes a closed form of
+  the scalar curvature in power sums, applies the Schur–Ostrowski criterion, and
+  shows that the gradient numerator splits into one explicit term per point, each
+  of which has the required sign. The endpoint p = ∞ was formalized earlier in
+  the trureturing project (github.com/the-omega-institute/trureturing, pull
+  request 15566).
+keywords:
+  - Lean 4
+  - Mathlib
+  - formal verification
+  - information geometry
+  - α-geometry
+  - Amari embedding
+  - scalar curvature
+  - majorization
+  - Schur-convexity
