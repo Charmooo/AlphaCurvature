@@ -7,7 +7,7 @@ authors:
     # orcid: "https://orcid.org/0000-0000-0000-0000"
   - name: "Claude (Anthropic)"
 license: Apache-2.0
-# doi: (add the Zenodo DOI after the first release)
+doi: 10.5281/zenodo.24464061
 repository-code: "https://github.com/Charmooo/AlphaCurvature"
 type: software
 abstract: >-

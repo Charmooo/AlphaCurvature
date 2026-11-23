@@ -1,5 +1,7 @@
 # AlphaCurvature
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24464061.svg)](https://doi.org/10.5281/zenodo.24464061)
+
 A Lean 4 + Mathlib proof of the **α-geometry curvature conjecture** of Gibilisco and Isola: on
 the open probability simplex with `n ≥ 3` points, the scalar curvature of the α-geometry is
 strictly Schur-increasing for `p ∈ (2, ∞]` and strictly Schur-decreasing for `p ∈ (1, 2)`. Here
