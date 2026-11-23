@@ -1,6 +1,6 @@
 # AlphaCurvature
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24464060.svg)](https://doi.org/10.5281/zenodo.24464060)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24485602.svg)](https://doi.org/10.5281/zenodo.24485602)
 
 Lean 4 + Mathlib proofs of the two **α-geometry curvature conjectures** of Gibilisco and Isola.
 Write `p = 2/(1 − α)`.
