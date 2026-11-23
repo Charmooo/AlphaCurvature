@@ -1,12 +1,21 @@
 # AlphaCurvature
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24464061.svg)](https://doi.org/10.5281/zenodo.24464061)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24464060.svg)](https://doi.org/10.5281/zenodo.24464060)
 
-A Lean 4 + Mathlib proof of the **α-geometry curvature conjecture** of Gibilisco and Isola: on
-the open probability simplex with `n ≥ 3` points, the scalar curvature of the α-geometry is
-strictly Schur-increasing for `p ∈ (2, ∞]` and strictly Schur-decreasing for `p ∈ (1, 2)`. Here
-`p = 2/(1 − α)`. The theorems are in [`AlphaCurvature/Main.lean`](AlphaCurvature/Main.lean),
-whose docstring lists the definitions the statement depends on.
+Lean 4 + Mathlib proofs of the two **α-geometry curvature conjectures** of Gibilisco and Isola.
+Write `p = 2/(1 − α)`.
+
+* **Classical (Conjecture 4.1).** On the open probability simplex with `n ≥ 3` points, the
+  scalar curvature of the α-geometry is strictly Schur-increasing for `p ∈ (2, ∞]` and strictly
+  Schur-decreasing for `p ∈ (1, 2)`. The theorems are in
+  [`AlphaCurvature/Main.lean`](AlphaCurvature/Main.lean).
+* **Quantum (Conjecture 4.2).** On the faithful states of `n × n` matrices, the scalar
+  curvature of the quantum α-geometry is a strictly Schur-monotone function of the eigenvalues,
+  in the same directions, for every `n`. The theorems are in
+  [`AlphaCurvature/Quantum/Conjecture.lean`](AlphaCurvature/Quantum/Conjecture.lean); see
+  [the quantum conjecture](#the-quantum-conjecture).
+
+Each file's docstring lists the definitions its statement depends on.
 
 ```lean
 theorem AlphaCurvature.scalarCurvature_alphaChart_lt_of_two_lt {n : ℕ} {x y : Fin n → ℝ}
@@ -28,7 +37,7 @@ theorem AlphaCurvature.scalarCurvature_alphaChart_lt_of_lt_two {n : ℕ} {x y : 
 `scalarCurvature_alphaChart_lt` covers with the logarithmic embedding. Every theorem uses only the
 standard axioms `propext`, `Classical.choice` and `Quot.sound`.
 
-## Which statement
+## The classical conjecture
 
 This is **Conjecture 4.1** of P. Gibilisco and T. Isola, *On the monotonicity of scalar curvature
 in classical and quantum information geometry* (J. Math. Phys. 46 (2005); arXiv
@@ -57,7 +66,7 @@ and the Riemann tensor in 40-digit arithmetic. It agrees with the closed form th
 equal to `scalarCurvature` (`scalarCurvature_alphaChart`) to a relative error of `3·10⁻³⁷`, for
 `n = 3…6` and `p ∈ {3/2, 2, 3, 4, 10}`.
 
-## The route
+## The classical route
 
 1. **Curvature of a metric in a chart** (`Curvature/`). The Christoffel, Riemann, Ricci and scalar
    curvature maps of a field of bilinear forms, how they change under a change of chart, and the
@@ -89,6 +98,55 @@ sign. At `α = 1`, `Z` is
 `∑ₖ yₖ² (∑ₗ yₗ − 2yₖ)²`, which pairs each point with a sum over all points, and no
 fixed-size split can see that.
 
+## The quantum conjecture
+
+```lean
+theorem AlphaCurvature.Quantum.scalarCurvature_amariChart_lt_of_two_lt {n : ℕ}
+    {ρ σ : Matrix (Fin n) (Fin n) ℂ} {p : ℝ} (hp : 2 < p) (hρ : ρ.PosDef) (hσ : σ.PosDef)
+    (hmaj : IsMajorizedBy hρ.1.eigenvalues hσ.1.eigenvalues)
+    (hne : ∀ π : Equiv.Perm (Fin n), hρ.1.eigenvalues ∘ π ≠ hσ.1.eigenvalues) :
+    scalarCurvature (pullback (amariChart (1 - 2 / p) (tracelessHermitian (Fin n)) σ)
+        fun _ ↦ hsForm) 0 <
+      scalarCurvature (pullback (amariChart (1 - 2 / p) (tracelessHermitian (Fin n)) ρ)
+        fun _ ↦ hsForm) 0
+```
+
+`scalarCurvature_amariChart_lt_of_lt_two` is the reverse inequality for `p ∈ (1, 2)`, and
+`scalarCurvature_amariChart_lt` and `scalarCurvature_amariChart_lt_of_neg` are the same in `α`,
+with `p = ∞` at `α = 1`.
+
+| Gibilisco–Isola | Lean |
+|---|---|
+| Def. 4.5: on the faithful states `D¹ₙ`, the pullback of the Hilbert–Schmidt form `tr(XY)` by `A_p(ρ) = p ρ^(1/p)`, and by `log ρ` at `p = ∞` | `pullback (amariChart α (tracelessHermitian (Fin n)) ρ) fun _ ↦ hsForm`: the chart `z ↦ A(ρ + z)` of `ρ` plus the traceless Hermitian matrices. The powers are `exp (s log ρ)`, with `log` an integral of resolvents, and agree with the continuous functional calculus. |
+| Def. 4.6: `Scal_p(ρ)` | `scalarCurvature G 0`, at the centre of the chart |
+| faithful states, majorization of spectra | positive definite matrices of any trace, `IsMajorizedBy` on `IsHermitian.eigenvalues` |
+| `n ≥ 2` | any `n`. On one point the hypotheses cannot hold. |
+
+The route:
+
+1. **Matrix functions** (`ForMathlib/ExpDeriv.lean`, `Quantum/Log.lean`, `Quantum/Power.lean`).
+   The derivative of `exp` in a noncommutative Banach algebra, the logarithm as
+   `∫₀¹ (x − 1)((1 − s)x + s)⁻¹ ds`, and the Daleckii–Krein formula for both at a diagonal.
+2. **A hypersurface** (`Curvature/Gauss.lean`, `Quantum/Normal.lean`,
+   `Quantum/Hypersurface.lean`). The image of `A` is a level set with normal
+   `N(ρ) = ρ^((1+α)/2)`, and the Gauss equation gives the scalar curvature from the second
+   fundamental form `⟨D²A, N⟩`.
+3. **The closed form and the split** (`Quantum/ClosedForm.lean`, `Quantum/Assembly.lean`). The
+   scalar curvature is unitarily invariant, and at the eigenvalues `λ` it is
+   `S_q = S_cl(λ) + E(λ)`: the classical curvature plus a quantum excess
+   `E = (2TM + M² − Q)/W`. Here `M` and `Q` are the sums of `Kᵢⱼ` and `Kᵢⱼ²` over `i ≠ j`,
+   `Kᵢⱼ` is the ratio of the divided differences of `t^((1+α)/2)` and of `A`,
+   `T = c (P(α) − P(1+2α)/W)`, `W = P(1+α)` and `c = (1+α)/2`.
+4. **The kernel** (`Quantum/Kernel.lean`, `Quantum/KernelFacts.lean`).
+   `K(a, b) = c ∫₀¹ (t aᵉ + (1 − t) bᵉ)^(α/e) dt` with `e = 1/p`, and `∫₀¹ aᵗ b¹⁻ᵗ dt` at
+   `α = 1`. Differentiating under the integral gives the signs, monotonicity, a swap inequality,
+   a bound on `∂²K/∂a²` and, for `α < 0`, log-convexity in each argument.
+5. **The excess** (`Quantum/Excess.lean`, `Quantum/ExcessSign.lean`). With `a = λᵢ > b = λⱼ`,
+   `W³(∂ᵢE − ∂ⱼE)` is an explicit `Z`, and the kernel facts give `Z < 0` for `0 < α ≤ 1` and
+   `Z > 0` for `−1 < α < 0`, already with two points.
+6. **Schur–Ostrowski** (`Quantum/Conjecture.lean`). The classical gradient drops weakly and the
+   excess gradient strictly, so the sum is strictly Schur-monotone for every `n`.
+
 ## Building
 
 ```bash
@@ -110,38 +168,52 @@ The toolchain is in [`lean-toolchain`](lean-toolchain), and Mathlib is pinned in
 | `Curvature/Basic.lean` | Christoffel, Riemann, Ricci and scalar curvature of a field of bilinear forms |
 | `Curvature/Pullback.lean` | change of chart; curvature is a tensor |
 | `Curvature/Hessian.lean` | curvature of a metric with a totally symmetric derivative |
+| `Curvature/Gauss.lean` | the Gauss equation for a pullback of a constant form; codimension one |
 | `ForMathlib/Basic.lean` | small lemmas: derivatives of fields of linear maps, invertible bilinear forms |
 | `ForMathlib/Majorization.lean` | majorization and the Schur–Ostrowski criterion, non-strict and strict |
+| `ForMathlib/ExpDeriv.lean` | the derivative of `exp` in a Banach algebra; Daleckii–Krein at a diagonal |
+| `ForMathlib/ParametricIntervalIntegral.lean` | differentiation under an interval integral, from pointwise smoothness |
 | `Metric.lean` | the α-metric, the Amari embedding, the chart, the closed form |
 | `Gradient.lean` | the curvature on the positive orthant, its gradient, the numerator `Z` |
 | `PerPoint.lean` | the per-point form of `Z` and its sign |
-| `Main.lean` | the conjecture |
+| `Main.lean` | the classical conjecture |
+| `Quantum/Log.lean`, `Quantum/Power.lean` | the matrix logarithm and real powers, their derivatives |
+| `Quantum/Normal.lean`, `Quantum/Hypersurface.lean` | the quantum Amari embedding, its normal, the Gauss hypotheses |
+| `Quantum/ClosedForm.lean`, `Quantum/Assembly.lean` | the closed form and the split `S_q = S_cl + E` |
+| `Quantum/Kernel.lean`, `Quantum/KernelFacts.lean` | the kernel as a power-mean integral and its inequalities |
+| `Quantum/Excess.lean`, `Quantum/ExcessSign.lean` | the gradient of the excess and its sign |
+| `Quantum/Conjecture.lean` | the quantum conjecture |
 
 ## Prior work
 
-* Gibilisco and Isola's Theorem 4.1 is the two-point model of the conjecture. It is stated for
+* Gibilisco and Isola's Theorem 4.1 is the two-point model of the classical conjecture. It is stated for
   `c_p`, the curvature of the image of the simplex as a curve in the plane, because the
-  intrinsic scalar curvature of a curve is zero. A. Andai, *On the curvature of the quantum state space with pull-back metrics* (Linear Algebra
-  Appl. 426 (2007); arXiv math-ph/0604031), reduced the three-point case to an inequality in one
-  variable.
+  intrinsic scalar curvature of a curve is zero. A. Andai, *On the curvature of the quantum
+  state space with pull-back metrics* (Linear Algebra Appl. 426 (2007); arXiv math-ph/0604031),
+  reduced the three-point case to an inequality in one variable.
 * The endpoint `p = ∞` (the logarithmic geometry, `α = 1`), with every `n ≥ 3` and the strict
   form, was proved in Lean first, in the
   [trureturing](https://github.com/the-omega-institute/trureturing) project: pull request
   [#15566](https://github.com/the-omega-institute/trureturing/pull/15566), merged on
   11 October 2026. In that project the finite-`p` case is still listed as open
   ([issue #26510](https://github.com/the-omega-institute/trureturing/issues/26510), last updated
-  4 November 2026). The same project proved the `p = 3` slice of the quantum Conjecture 4.2
-  ([#15831](https://github.com/the-omega-institute/trureturing/pull/15831)). This library proves
-  the endpoint independently, through the same per-point form as for finite `p`.
-* As of 23 November 2026 we know of no other proof. Lu, *The Lᵖ-geometry and its applications*
-  (arXiv 2512.13051), answers Problem 7 of Gibilisco's 2020 list, on Orlicz spaces, and not the
-  curvature conjecture.
+  4 November 2026). This library proves the endpoint independently, through the same per-point
+  form as for finite `p`.
+* The `p = 3` slice of the quantum Conjecture 4.2 (`α = 1/3`), strict and in every dimension, was
+  also proved first in trureturing: pull requests
+  [#15831](https://github.com/the-omega-institute/trureturing/pull/15831) and
+  [#16288](https://github.com/the-omega-institute/trureturing/pull/16288), merged on
+  13 October 2026.
+* As of 23 November 2026 we know of no other proof of either conjecture for general `p`. Lu,
+  *The Lᵖ-geometry and its applications* (arXiv 2512.13051), answers Problem 7 of Gibilisco's
+  2020 list, on Orlicz spaces, and not the curvature conjectures.
 
 Please tell us about any earlier work that we have missed.
 
 ## History
 
-The library was developed inside a larger Lean project and extracted here. The curvature
+The library was developed inside a larger Lean project and extracted here. Version 1.0.0
+contained the classical conjecture, and version 2.0.0 adds the quantum one. The curvature
 infrastructure is shared with [PetzCurvature](https://github.com/Charmooo/PetzCurvature).
 
 ## License

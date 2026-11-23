@@ -1,32 +1,42 @@
 cff-version: 1.2.0
 message: "If you use this formalization, please cite it as below."
-title: "AlphaCurvature: a Lean 4 proof of the Gibilisco–Isola conjecture on the scalar curvature of the α-geometries"
+title: "AlphaCurvature: Lean 4 proofs of the Gibilisco–Isola conjectures on the scalar curvature of the classical and quantum α-geometries"
 authors:
   - family-names: Bornemann
     given-names: Adam
     # orcid: "https://orcid.org/0000-0000-0000-0000"
   - name: "Claude (Anthropic)"
+version: 2.0.0
+date-released: 2026-11-23
 license: Apache-2.0
-doi: 10.5281/zenodo.24464061
+doi: 10.5281/zenodo.24464060
 repository-code: "https://github.com/Charmooo/AlphaCurvature"
 type: software
 abstract: >-
-  A formal proof, in Lean 4 with Mathlib, of Conjecture 4.1 of P. Gibilisco and
-  T. Isola (J. Math. Phys. 46 (2005)), restated as open in P. Gibilisco, Entropy
-  22 (2020) 1409: on the open probability simplex with at least three points, the
-  scalar curvature of the α-geometry, the pullback of the Euclidean metric by the
-  Amari embedding ρ ↦ p ρ^(1/p), is strictly Schur-increasing for p in (2, ∞] and
-  strictly Schur-decreasing for p in (1, 2). The proof formalizes a closed form of
-  the scalar curvature in power sums, applies the Schur–Ostrowski criterion, and
-  shows that the gradient numerator splits into one explicit term per point, each
-  of which has the required sign. The endpoint p = ∞ was formalized earlier in
+  Formal proofs, in Lean 4 with Mathlib, of Conjectures 4.1 and 4.2 of
+  P. Gibilisco and T. Isola (J. Math. Phys. 46 (2005)). With p = 2/(1 − α), the
+  α-geometry is the pullback of the Euclidean (Hilbert–Schmidt) metric by the
+  Amari embedding ρ ↦ p ρ^(1/p), and by log ρ at p = ∞. Conjecture 4.1: on the
+  open probability simplex with at least three points, its scalar curvature is
+  strictly Schur-increasing for p in (2, ∞] and strictly Schur-decreasing for p
+  in (1, 2). Conjecture 4.2: on the faithful states of n × n matrices, its scalar
+  curvature is a strictly Schur-monotone function of the eigenvalues in the same
+  directions, for every n. The classical proof formalizes a closed form of the
+  scalar curvature in power sums, applies the Schur–Ostrowski criterion, and
+  splits the gradient numerator into one explicit term per point. The quantum
+  proof computes the curvature of the image of the embedding by the Gauss
+  equation, splits it into the classical curvature of the eigenvalues plus a
+  quantum excess, writes the off-diagonal kernel as a power-mean integral, and
+  shows that the excess is strictly Schur-monotone. The endpoint p = ∞ of
+  Conjecture 4.1 and the slice p = 3 of Conjecture 4.2 were formalized earlier in
   the trureturing project (github.com/the-omega-institute/trureturing, pull
-  request 15566).
+  requests 15566 and 15831).
 keywords:
   - Lean 4
   - Mathlib
   - formal verification
   - information geometry
+  - quantum information geometry
   - α-geometry
   - Amari embedding
   - scalar curvature

@@ -73,7 +73,7 @@ variable {E F : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E] [NormedAddComm
   [NormedSpace ℝ F]
 
 /-- **The product rule** for `y ↦ c y (a y) (b y)`, `c` a field of bilinear maps. -/
-private theorem fderiv_bilin_apply_apply {F₁ F₂ F₃ : Type*} [NormedAddCommGroup F₁]
+theorem fderiv_bilin_apply_apply {F₁ F₂ F₃ : Type*} [NormedAddCommGroup F₁]
     [NormedSpace ℝ F₁] [NormedAddCommGroup F₂] [NormedSpace ℝ F₂] [NormedAddCommGroup F₃]
     [NormedSpace ℝ F₃] {c : E → F₁ →L[ℝ] F₂ →L[ℝ] F₃} {a : E → F₁} {b : E → F₂} {x : E}
     (hc : DifferentiableAt ℝ c x) (ha : DifferentiableAt ℝ a x) (hb : DifferentiableAt ℝ b x)
