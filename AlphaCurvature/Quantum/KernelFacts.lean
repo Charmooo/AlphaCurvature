@@ -397,7 +397,10 @@ theorem continuousOn_kerF₁₁ (ha : 0 < a) (hb : 0 < b) :
           (a ^ 2 * (t * a ^ ((1 - α) / 2) + (1 - t) * b ^ ((1 - α) / 2)) ^ 2) :=
       funext fun t ↦ kerF₁₁_of_ne h
     rw [e]
-    refine ContinuousOn.div (by fun_prop) (by fun_prop) fun t ht ↦ ?_
+    refine ContinuousOn.div (f := fun t ↦ α * t * a ^ ((1 - α) / 2) * kerF α t a b *
+        (t * a ^ ((1 - α) / 2) * (α - 1) - (1 + α) / 2 * (1 - t) * b ^ ((1 - α) / 2)))
+      (g := fun t ↦ a ^ 2 * (t * a ^ ((1 - α) / 2) + (1 - t) * b ^ ((1 - α) / 2)) ^ 2)
+      (by fun_prop) (by fun_prop) fun t ht ↦ ?_
     have := kerMix_pos (α := α) ht ha hb
     unfold kerMix at this
     positivity

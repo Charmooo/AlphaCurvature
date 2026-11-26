@@ -122,11 +122,17 @@ noncomputable def traceRe : Matrix d d ℂ →L[ℝ] ℝ :=
 /-- The **Hilbert–Schmidt form** `⟨X, Y⟩ = Re tr (X Y)`. On Hermitian matrices it is the
 Hilbert–Schmidt inner product. -/
 noncomputable def hsForm : Matrix d d ℂ →L[ℝ] Matrix d d ℂ →L[ℝ] ℝ :=
-  (ContinuousLinearMap.compL ℝ _ _ ℝ traceRe).comp (ContinuousLinearMap.mul ℝ (Matrix d d ℂ))
+  LinearMap.toContinuousLinearMap
+    ((LinearMap.toContinuousLinearMap : (Matrix d d ℂ →ₗ[ℝ] ℝ) ≃ₗ[ℝ] _).toLinearMap ∘ₗ
+      LinearMap.mk₂ ℝ (fun X Y ↦ (trace (X * Y)).re)
+        (fun X X' Y ↦ by simp [Matrix.add_mul, Matrix.trace_add])
+        (fun c X Y ↦ by simp [Matrix.trace_smul])
+        (fun X Y Y' ↦ by simp [Matrix.mul_add, Matrix.trace_add])
+        (fun c X Y ↦ by simp [Matrix.trace_smul]))
 
 @[simp]
-theorem hsForm_apply (X Y : Matrix d d ℂ) : hsForm X Y = (trace (X * Y)).re := by
-  simp [hsForm, traceRe]
+theorem hsForm_apply (X Y : Matrix d d ℂ) : hsForm X Y = (trace (X * Y)).re :=
+  rfl
 
 theorem hsForm_comm (X Y : Matrix d d ℂ) : hsForm X Y = hsForm Y X := by
   simp [trace_mul_comm X Y]

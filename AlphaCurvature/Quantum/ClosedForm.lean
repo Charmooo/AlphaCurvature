@@ -130,7 +130,7 @@ theorem hsForm_schur {a b : d → d → ℝ} (hb : ∀ i j, b i j = b j i) {X Y 
     (hv : v.IsHermitian) : hsForm X Y = wform (fun i j ↦ a i j * b i j) u v := by
   rw [hsForm_apply, Matrix.trace, wform, Complex.re_sum]
   refine Finset.sum_congr rfl fun i _ ↦ ?_
-  rw [diag_apply, mul_apply, Complex.re_sum]
+  rw [Matrix.diag_apply, Matrix.mul_apply, Complex.re_sum]
   refine Finset.sum_congr rfl fun j _ ↦ ?_
   rw [hX, hY, hb j i, ← hv.apply j i,
     show (a i j : ℂ) * u i j * (b i j * star (v i j)) =

@@ -132,7 +132,7 @@ theorem contDiffAt_alphaForm (hx : ∀ i, x i ≠ 0) {n : WithTop ℕ∞} :
     ContDiffAt ℝ n (alphaForm α) x := by
   unfold alphaForm
   refine ContDiffAt.sum fun i _ ↦ ?_
-  exact ((contDiff_apply ℝ ℝ i).contDiffAt.rpow_const_of_ne (hx i)).smul contDiffAt_const
+  exact ((contDiff_apply ℝ (fun _ ↦ ℝ) i).contDiffAt.rpow_const_of_ne (hx i)).smul contDiffAt_const
 
 /-! ### The Amari embedding -/
 
